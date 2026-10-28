@@ -1,6 +1,6 @@
 """SQL aggregations over a validated snapshot."""
-def rows(conn,query):
-    cursor=conn.execute(query)
+def rows(conn,query,params=()):
+    cursor=conn.execute(query,params)
     cols=[x[0] for x in cursor.description]
     return [dict(zip(cols,r)) for r in cursor.fetchall()]
 def summary(conn):

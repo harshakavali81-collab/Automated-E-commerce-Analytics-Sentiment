@@ -13,6 +13,12 @@ class AdvancedTests(unittest.TestCase):
     with sqlite3.connect(":memory:") as con:
       with self.assertRaises(ValueError):build_alerts(con,change_threshold=0)
       with self.assertRaises(ValueError):build_alerts(con,stock_threshold=-1)
+ def test_reject_nan_and_noninteger_thresholds(self):
+    with sqlite3.connect(":memory:") as con:
+      with self.assertRaises(ValueError):build_alerts(con,change_threshold=float("nan"))
+      with self.assertRaises(ValueError):build_alerts(con,change_threshold=float("inf"))
+      with self.assertRaises(ValueError):build_alerts(con,stock_threshold=2.5)
+      with self.assertRaises(ValueError):build_alerts(con,stock_threshold=True)
  def test_explainable_price_change_alert(self):
     with sqlite3.connect(":memory:") as con:
       con.execute("CREATE TABLE prices(product_id TEXT,product_name TEXT,observed_date TEXT,price REAL,inventory INTEGER)")

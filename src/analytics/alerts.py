@@ -1,9 +1,11 @@
 """Transparent, synthetic-safe price change and latest-stock alerts."""
+from math import isfinite
 from src.analytics.metrics import rows
 
 def build_alerts(conn, change_threshold=15.0, stock_threshold=10):
-    if change_threshold <= 0 or stock_threshold < 0:
-        raise ValueError("Invalid alert thresholds")
+    if (not isinstance(change_threshold,(float,int)) or not isfinite(change_threshold)
+       or change_threshold<=0 or type(stock_threshold) is not int or stock_threshold<0):
+        raise ValueError("Alert thresholds must be a positive finite percentage and nonnegative integer stock")
     observations=rows(conn,"""WITH changed AS (
       SELECT product_id,product_name,observed_date,price,
              LAG(price) OVER(PARTITION BY product_id ORDER BY observed_date) previous_price
@@ -23,7 +25,7 @@ def build_alerts(conn, change_threshold=15.0, stock_threshold=10):
              ROW_NUMBER() OVER(PARTITION BY product_id ORDER BY observed_date DESC) rn
       FROM prices)
       SELECT product_id,product_name,observed_date,inventory FROM ranked
-      WHERE rn=1 AND inventory<="""+str(int(stock_threshold)))
+      WHERE rn=1 AND inventory<=?""",(stock_threshold,))
     return {"change_threshold_pct":change_threshold,"stock_threshold_units":stock_threshold,
        "price_movements":movements,"low_stock":latest,
        "price_movement_count":len(movements),"low_stock_count":len(latest),

@@ -1,5 +1,9 @@
 # 🛒 CommerceLens — Automated E-commerce Analytics & Sentiment
 
+[![Python analytics CI](https://github.com/harshakavali81-collab/Automated-E-commerce-Analytics-Sentiment/actions/workflows/ci.yml/badge.svg)](https://github.com/harshakavali81-collab/Automated-E-commerce-Analytics-Sentiment/actions/workflows/ci.yml) [![Static analytics preview CI](https://github.com/harshakavali81-collab/Automated-E-commerce-Analytics-Sentiment/actions/workflows/static-site.yml/badge.svg)](https://github.com/harshakavali81-collab/Automated-E-commerce-Analytics-Sentiment/actions/workflows/static-site.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+**Portfolio:** [Full case study](https://harshakavali81-collab.github.io/harshavardhan-portfolio/cases/commercelens.html) · [Interactive synthetic preview](https://harshakavali81-collab.github.io/harshavardhan-portfolio/commercelens-demo.html) · [Download a source-generated static website from CI](https://github.com/harshakavali81-collab/Automated-E-commerce-Analytics-Sentiment/actions/workflows/static-site.yml)
+
 **Python · SQL · Pandas · Streamlit · Plotly · Sentiment · Data quality · CI**
 
 ![Project hero](docs/figures/01-commerce-overview.svg)
@@ -104,3 +108,5 @@ python -m scripts.build_site --out public
 ~~~
 
 The static build is attached to a GitHub Actions workflow run as commercelens-static-site. A separate manual Pages workflow can publish it once Pages is enabled. See [hosting instructions](docs/STATIC_HOSTING.md). This is not a hosted Python/Streamlit service.
+
+**Additional integrity controls:** Imported files reject duplicate or missing CSV headers and malformed records. Filtered dashboard CSVs escape spreadsheet formulas. SQL alert thresholds use bound parameters and reject invalid values. See [CSV data contracts](docs/CSV_CONTRACTS.md).
