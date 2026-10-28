@@ -93,3 +93,14 @@ GitHub Actions now checks unit and integration tests, the source-driven offline 
 [Advanced SQL](sql/advanced_analytics.sql) · [Architecture and data contracts](docs/ARCHITECTURE.md) · [Security and privacy](docs/SECURITY.md) · [Runbook](docs/OPERATIONS.md) · [ER model](docs/ERD.md) · [Interview walkthrough](docs/INTERVIEW_NOTES.md)
 
 **Limits still requiring actual services:** live licensed retailer API feeds, independent sentiment quality validation, production hosting and real customer/business outcomes. No credentials or real customer data have been used.
+
+## Deployable static analytics site
+
+The repository can generate a **self-contained, source-derived website** with ten real SQL-backed SVG charts and only synthetic aggregate metrics:
+
+~~~bash
+python -m scripts.build_site --out public
+# Open public/index.html
+~~~
+
+The static build is attached to a GitHub Actions workflow run as commercelens-static-site. A separate manual Pages workflow can publish it once Pages is enabled. See [hosting instructions](docs/STATIC_HOSTING.md). This is not a hosted Python/Streamlit service.

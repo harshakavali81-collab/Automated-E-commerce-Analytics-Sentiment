@@ -1,0 +1,40 @@
+name: CommerceLens static preview
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "scripts/**"
+      - "sql/**"
+      - ".github/workflows/static-site.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Generate synthetic static site
+        run: python -m scripts.build_site --out public
+      - name: Verify no private source files are included
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          site=Path("public")
+          assert (site/"index.html").read_text().count('class="panel chart"')==10
+          assert json.loads((site/"metrics.json").read_text())["source_kind"]=="synthetic_demo"
+          assert len(list(site.iterdir()))==4
+          print("Static site validated")
+          PY
+      - name: Upload static site for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: commercelens-static-site
+          path: public/
+          include-hidden-files: true
+          retention-days: 30

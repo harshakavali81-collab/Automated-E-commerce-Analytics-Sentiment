@@ -17,3 +17,6 @@ docs/generated-charts/
 *.sqlite
 *.sqlite3
 .coverage
+
+# Generated public-site artifact
+public/
