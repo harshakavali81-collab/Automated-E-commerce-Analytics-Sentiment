@@ -23,9 +23,15 @@ if not selection:st.info("Select at least one category");st.stop()
 prices=prices[prices.category.isin(selection)].copy()
 reviews=reviews[reviews.category.isin(selection)]
 start,end=prices.observed_date.min(),prices.observed_date.max()
-period=st.sidebar.slider("Observation date",min_value=start,max_value=end,value=(start,end))
-prices=prices[prices.observed_date.between(*period)].copy()
-reviews=reviews[reviews.review_date.between(*period)].copy()
+from datetime import date
+first_day,last_day=date.fromisoformat(start),date.fromisoformat(end)
+period=st.sidebar.date_input("Observation date",value=(first_day,last_day),min_value=first_day,max_value=last_day)
+if len(period)!=2:
+    st.info("Choose both start and end dates.")
+    st.stop()
+low,high=(d.isoformat() for d in period)
+prices=prices[prices.observed_date.between(low,high)].copy()
+reviews=reviews[reviews.review_date.between(low,high)].copy()
 if prices.empty:st.info("No observations for this selection");st.stop()
 prices["estimated_revenue"]=prices.price*prices.units_sold
 prices["discount_pct"]=(prices.list_price-prices.price)/prices.list_price*100
