@@ -22,6 +22,12 @@ jobs:
           assert "price_movements" in alerts and "low_stock" in alerts
           print("Validated offline report and price/stock flags")
           PY
+      - name: Save offline source-driven report
+        uses: actions/upload-artifact@v4
+        with:
+          name: commercelens-html-report
+          path: reports/commerce.html
+          retention-days: 14
       - name: Verify chart and notebook assets
         run: |
           python -m compileall -q src dashboard
@@ -57,6 +63,12 @@ jobs:
           python -m src.pipeline.run --demo
           python -m src.analytics.charts --out /tmp/commercelens
           test "$(find /tmp/commercelens -name '*.png' | wc -l)" -eq 10
+      - name: Save ten generated data charts
+        uses: actions/upload-artifact@v4
+        with:
+          name: commercelens-real-data-charts
+          path: /tmp/commercelens/*.png
+          retention-days: 14
       - name: Streamlit rendering smoke test
         run: |
           python - <<'PY'
