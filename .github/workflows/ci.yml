@@ -10,6 +10,20 @@ jobs:
           python-version: "3.11"
       - name: Run all unit and integration tests
         run: python -m unittest discover -s tests -v
+      - name: Verify chart and notebook assets
+        run: |
+          python -m compileall -q src dashboard
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          figs=list(Path("docs/figures").glob("*.svg"))
+          notebooks=list(Path("notebooks").glob("*.ipynb"))
+          assert len(figs)==10, len(figs)
+          assert len(notebooks)==3, len(notebooks)
+          for p in notebooks: assert json.loads(p.read_text())["nbformat"]==4
+          for p in figs: assert "<svg" in p.read_text()
+          print("10 gallery SVGs, 3 notebooks and Python syntax verified")
+          PY
       - name: Verify demo data pipeline
         run: python -m src.pipeline.run --demo
       - name: Verify JSON output
