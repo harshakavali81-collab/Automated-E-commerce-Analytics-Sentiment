@@ -6,6 +6,7 @@ from src.ingestion.load_csv import read_csv
 from src.processing.clean import clean_prices,clean_reviews
 from src.sentiment.lexicon import label
 from src.analytics.metrics import summary
+from src.analytics.alerts import build_alerts
 ROOT=Path(__file__).resolve().parents[2]
 def execute(prices=None,reviews=None,out=None,demo=False):
     prices=Path(prices) if prices else ROOT/"data/raw/prices.csv"
@@ -25,6 +26,8 @@ def execute(prices=None,reviews=None,out=None,demo=False):
         conn.executemany("INSERT INTO prices VALUES(?,?,?,?,?,?,?,?,?)",p)
         conn.executemany("INSERT INTO reviews VALUES(?,?,?,?,?,?)",[(*x,label(x[4])) for x in r])
         result=summary(conn)
+        alerts=build_alerts(conn)
+    (out/"alerts.json").write_text(json.dumps(alerts,indent=2),encoding="utf-8")
     result.update({"source_kind":"synthetic_demo" if demo else "user_supplied_csv_license_not_verified",
       "sentiment_method":"negation_aware_lexicon_not_benchmarked",
       "data_quality":{"prices":pq,"reviews":rq}})
