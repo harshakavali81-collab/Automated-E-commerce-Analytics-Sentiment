@@ -1,0 +1,17 @@
+name: Commerce analytics tests
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run all unit and integration tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify demo data pipeline
+        run: python -m src.pipeline.run --demo
+      - name: Verify JSON output
+        run: |
+          python -c "import json; from pathlib import Path; p=json.loads(Path('data/processed/summary.json').read_text()); assert p['observation_count']==1440; assert p['product_count']==12; assert p['data_quality']['prices']['rejected']==0"
