@@ -14,3 +14,9 @@ ecommerce-trend-sentiment/
   .github/workflows/ci.yml
   requirements.txt
   README.md
+  Dockerfile + docker-compose.yml + Makefile
+  scripts/{build_report,refresh}.py   # deterministic offline export
+  src/analytics/{alerts,report}.py    # alerts and 10-source-chart report
+  tests/test_advanced.py             # report/alert security checks
+  docs/{SECURITY,OPERATIONS,ERD,INTERVIEW_NOTES}.md
+  sql/advanced_analytics.sql

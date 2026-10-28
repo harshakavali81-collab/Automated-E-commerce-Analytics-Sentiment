@@ -10,6 +10,18 @@ jobs:
           python-version: "3.11"
       - name: Run all unit and integration tests
         run: python -m unittest discover -s tests -v
+      - name: Build offline 10-chart HTML report and analytics alerts
+        run: |
+          python -m scripts.refresh --demo --report reports/commerce.html
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          html=Path("reports/commerce.html").read_text(encoding="utf-8")
+          assert html.count('class="panel chart"')==10
+          alerts=json.loads(Path("data/processed/alerts.json").read_text())
+          assert "price_movements" in alerts and "low_stock" in alerts
+          print("Validated offline report and price/stock flags")
+          PY
       - name: Verify chart and notebook assets
         run: |
           python -m compileall -q src dashboard
@@ -29,3 +41,47 @@ jobs:
       - name: Verify JSON output
         run: |
           python -c "import json; from pathlib import Path; p=json.loads(Path('data/processed/summary.json').read_text()); assert p['observation_count']==1440; assert p['product_count']==12; assert p['data_quality']['prices']['rejected']==0"
+
+  ui-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install interactive dashboard dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Generate 10 data-driven PNG charts
+        run: |
+          python -m src.pipeline.run --demo
+          python -m src.analytics.charts --out /tmp/commercelens
+          test "$(find /tmp/commercelens -name '*.png' | wc -l)" -eq 10
+      - name: Streamlit rendering smoke test
+        run: |
+          python - <<'PY'
+          from streamlit.testing.v1 import AppTest
+          app=AppTest.from_file("dashboard/app.py", default_timeout=40).run()
+          assert len(app.exception)==0, [str(e.message) for e in app.exception]
+          assert len(app.metric)>=4, len(app.metric)
+          print("Streamlit rendered four KPI cards and no exceptions")
+          PY
+
+  container-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build local container
+        run: docker build -t commercelens-ci .
+      - name: Start and check demo service health
+        run: |
+          docker run -d --name commercelens-ci -p 127.0.0.1:18501:8501 commercelens-ci
+          for i in $(seq 1 45); do
+            if curl -fsS http://127.0.0.1:18501/_stcore/health; then exit 0; fi
+            sleep 3
+          done
+          docker logs commercelens-ci
+          exit 1
+      - name: Stop container
+        if: always()
+        run: docker rm -f commercelens-ci || true

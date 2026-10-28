@@ -60,3 +60,33 @@ python -m src.pipeline.run --prices /path/prices.csv --reviews /path/reviews.csv
 
 ## Scope and known limitations
 Default prices, units and reviews are synthetic; this does not demonstrate measured revenue, sentiment prediction accuracy, real-time refresh or market scraping. A public Streamlit deployment and genuine authorized retailer feed are **not configured**. Imported third-party data require permission, privacy review and source verification.
+
+## Extended delivery: offline report, alerts and local Docker
+
+The enhanced project includes a complete **one-command synthetic data refresh** that produces a constrained SQLite snapshot, an alerts JSON file and a **standalone HTML report with 10 actual data-driven inline SVG charts** (distinct from the 10 illustrative README gallery images).
+
+~~~bash
+python -m scripts.refresh --demo
+# Open reports/commerce.html in Chrome, Edge or Firefox (no web server needed).
+~~~
+
+The price-change rule flags consecutive observations moving at least 15%; the stock rule flags latest inventory at or below 10 units. These are heuristics on synthetic/default or supplied data and are not proven market-alert performance.
+
+### Local Docker run
+
+~~~bash
+docker compose up --build -d
+# Open http://127.0.0.1:8501
+docker compose logs --tail=50
+docker compose down
+~~~
+
+The Docker demo binds to **localhost only**, runs the app as a non-root user, and generates fictional records at startup. Docker packaging does not imply a public production deployment.
+
+### Reproducible quality evidence
+
+GitHub Actions now checks unit and integration tests, the source-driven offline report, dashboard dependencies and Streamlit rendering, all 10 Matplotlib chart exports, and a container build/service health check. Monitor the Actions page for pass/fail status before describing these checks as passed.
+
+[Advanced SQL](sql/advanced_analytics.sql) · [Architecture and data contracts](docs/ARCHITECTURE.md) · [Security and privacy](docs/SECURITY.md) · [Runbook](docs/OPERATIONS.md) · [ER model](docs/ERD.md) · [Interview walkthrough](docs/INTERVIEW_NOTES.md)
+
+**Limits still requiring actual services:** live licensed retailer API feeds, independent sentiment quality validation, production hosting and real customer/business outcomes. No credentials or real customer data have been used.
