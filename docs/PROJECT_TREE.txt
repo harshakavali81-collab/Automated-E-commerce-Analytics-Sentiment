@@ -1,0 +1,16 @@
+ecommerce-trend-sentiment/
+  data/{raw,interim,processed}/
+  notebooks/{01_data_quality,02_price_eda,03_sentiment_analysis}.ipynb
+  src/ingestion/{generate_demo,load_csv}.py
+  src/processing/clean.py
+  src/sentiment/lexicon.py
+  src/analytics/{metrics,charts}.py
+  src/pipeline/run.py
+  dashboard/app.py
+  sql/{schema,kpis}.sql
+  tests/{test_pipeline,test_quality,test_sentiment}.py
+  docs/figures/01..10.svg
+  docs/{ARCHITECTURE,DATA_DICTIONARY,VALIDATION,DEPLOYMENT,PORTFOLIO_CASE_STUDY}.md
+  .github/workflows/ci.yml
+  requirements.txt
+  README.md
