@@ -81,7 +81,7 @@ h2{font-size:20px;margin:5px 0 20px}.intro{color:#bed3df;max-width:850px}
 svg{width:100%;height:auto}table{border-collapse:collapse;width:100%}td,th{padding:9px;border-bottom:1px solid #365568;text-align:left}
 th{color:var(--accent)}pre{white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:900px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
-</style></head><body><main><p class="small">COMMER CELENS | REPRODUCIBLE OFFLINE REPORT</p>
+</style></head><body><main><p class="small">COMMERCELENS | REPRODUCIBLE OFFLINE REPORT</p>
 <h1>E-commerce trends &amp; sentiment</h1><p class="intro">Graphs below are computed from the current local SQLite snapshot.</p>
 <div class="notice"><strong>Source: '''+source_kind+'''</strong>. Default data is synthetic. Price × simulated units
 is NOT audited revenue. Sentiment is a rule-based, unvalidated baseline. This report never fetches live retailer data.</div>
@@ -90,7 +90,7 @@ is NOT audited revenue. Sentiment is a rule-based, unvalidated baseline. This re
 <table><thead><tr><th>Product</th><th>Category</th><th>Mean price</th><th>Units</th><th>Est. revenue</th></tr></thead><tbody>'''+table+'''</tbody></table></div></section>
 <section class="panel" style="margin-top:20px"><h2>Quality and heuristic alert counts</h2><p>Price movements: '''+str(alerts["price_movement_count"])+'''. Latest low-stock records: '''+str(alerts["low_stock_count"])+'''.
 These are observation heuristics only, not a real-time marketplace alert service.</p><pre>'''+quality+'''</pre></section>
-<p class="small">Generated offline from source: github.com/harshakavali81-collab/Automated-E-commerce-Analytics-Sentiment</p>
+<p class="small">Generated offline from source: <a href="https://github.com/harshakavali81-collab/Automated-E-commerce-Analytics-Sentiment">CommerceLens source on GitHub</a> &nbsp; | &nbsp; <a href="https://harshakavali81-collab.github.io/harshavardhan-portfolio/cases/commercelens.html">Full portfolio case study</a></p>
 </main></body></html>'''
     path=Path(out);path.parent.mkdir(parents=True,exist_ok=True)
     path.write_text(html,encoding="utf-8")
