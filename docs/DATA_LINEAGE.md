@@ -1,6 +1,6 @@
 # Data provenance and lineage
 
-1. **Generator**: source/ingestion/generate_demo.py emits deterministic fictional prices.csv and reviews.csv with a fixed random seed of 42 by default. Product identities and review snippets are invented. Dates begin 2026-01-01.
+1. **Generator**: src/ingestion/generate_demo.py emits deterministic fictional prices.csv and reviews.csv with a fixed random seed of 42 by default. Product identities and review snippets are invented. Dates begin 2026-01-01.
 2. **Optional authorized import**: two CSVs may be supplied through explicit local file paths. The program does not check whether the user truly has rights to process those files; that remains the user's responsibility.
 3. **Cleaning**: parsing, date and number checks, duplicate counts, valid price product IDs in reviews. Invalid rows are rejected and recorded in summary.json.
 4. **Transform**: English lexicon-based sentiment label for each accepted review. Ratings are kept independent from sentiment labels.
