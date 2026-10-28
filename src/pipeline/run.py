@@ -8,6 +8,8 @@ from src.sentiment.lexicon import label
 from src.analytics.metrics import summary
 from src.analytics.alerts import build_alerts
 ROOT=Path(__file__).resolve().parents[2]
+PRICE_COLUMNS=("product_id","product_name","category","seller","observed_date","price","list_price","inventory","units_sold")
+REVIEW_COLUMNS=("review_id","product_id","review_date","rating","review_text")
 def execute(prices=None,reviews=None,out=None,demo=False):
     prices=Path(prices) if prices else ROOT/"data/raw/prices.csv"
     reviews=Path(reviews) if reviews else ROOT/"data/raw/reviews.csv"
@@ -15,9 +17,9 @@ def execute(prices=None,reviews=None,out=None,demo=False):
     if demo:
         if prices.parent!=reviews.parent:raise ValueError("Demo paths need the same folder")
         generate(prices.parent)
-    p,pq=clean_prices(read_csv(prices))
+    p,pq=clean_prices(read_csv(prices,required_columns=PRICE_COLUMNS))
     if not p:raise ValueError("All price observations were rejected")
-    r,rq=clean_reviews(read_csv(reviews),{row[0] for row in p})
+    r,rq=clean_reviews(read_csv(reviews,required_columns=REVIEW_COLUMNS),{row[0] for row in p})
     out.mkdir(parents=True,exist_ok=True)
     with sqlite3.connect(out/"commerce.sqlite") as conn:
         conn.executescript((ROOT/"sql/schema.sql").read_text())

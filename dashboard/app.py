@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+from src.processing.export import write_safe_csv
 root=Path(__file__).resolve().parents[1]
 db=root/"data/processed/commerce.sqlite"
 meta=root/"data/processed/summary.json"
@@ -61,6 +62,6 @@ detail=prices.groupby(["product_id","product_name","category"],as_index=False).a
  minimum=("price","min"),average=("price","mean"),maximum=("price","max"),
  estimated_revenue=("estimated_revenue","sum"))
 st.dataframe(detail,use_container_width=True,hide_index=True)
-st.download_button("Download filtered CSV",detail.to_csv(index=False).encode(),file_name="comparison.csv",mime="text/csv")
+st.download_button("Download filtered CSV",write_safe_csv(detail.to_dict("records"),list(detail.columns)).encode("utf-8"),file_name="comparison.csv",mime="text/csv")
 with st.expander("Data provenance and quality checks"):
     st.json(provenance)
