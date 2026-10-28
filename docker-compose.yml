@@ -1,0 +1,20 @@
+services:
+  commercelens:
+    build: .
+    image: commercelens:local
+    init: true
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8501:8501"
+    volumes:
+      - commerce_data:/app/data
+      - commerce_reports:/app/reports
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 256
+    mem_limit: 1g
+volumes:
+  commerce_data:
+  commerce_reports:

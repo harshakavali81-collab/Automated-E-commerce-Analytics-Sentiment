@@ -10,3 +10,10 @@ __pycache__/
 /data/processed/*.csv
 /data/processed/*.json
 !data/**/.gitkeep
+
+# Reports might include user-provided commercial information
+reports/
+docs/generated-charts/
+*.sqlite
+*.sqlite3
+.coverage

@@ -1,0 +1,14 @@
+.git
+.github
+.venv
+__pycache__
+.pytest_cache
+*.pyc
+.env
+data/raw/*.csv
+data/interim/*.csv
+data/processed/*.csv
+data/processed/*.json
+data/processed/*.sqlite
+reports
+docs/generated-charts
