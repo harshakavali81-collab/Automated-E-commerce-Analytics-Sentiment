@@ -58,6 +58,9 @@ python -m src.pipeline.run --prices /path/prices.csv --reviews /path/reviews.csv
 ## Technical documentation
 [Architecture](docs/ARCHITECTURE.md) · [Data dictionary](docs/DATA_DICTIONARY.md) · [Validation](docs/VALIDATION.md) · [Deployment](docs/DEPLOYMENT.md) · [Portfolio case study](docs/PORTFOLIO_CASE_STUDY.md) · [Tree](docs/PROJECT_TREE.txt) · [SQL KPIs](sql/kpis.sql)
 
+## Further evidence
+[Sentiment model card](docs/SENTIMENT_MODEL_CARD.md) · [Data lineage](docs/DATA_LINEAGE.md) · [Recruiter project summary](docs/PORTFOLIO_RECRUITER_SUMMARY.md) · [Latest workflow results](https://github.com/harshakavali81-collab/Automated-E-commerce-Analytics-Sentiment/actions/workflows/ci.yml)
+
 ## Scope and known limitations
 Default prices, units and reviews are synthetic; this does not demonstrate measured revenue, sentiment prediction accuracy, real-time refresh or market scraping. A public Streamlit deployment and genuine authorized retailer feed are **not configured**. Imported third-party data require permission, privacy review and source verification.
 
